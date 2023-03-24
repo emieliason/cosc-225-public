@@ -1,0 +1,38 @@
+body {
+    background-color: lightgray;
+}
+
+.main-body {
+    background-color: white;
+    width: 600px;
+    border-radius: 25px;
+    text-align: center;
+    margin: auto;
+    padding: 25px;
+}
+
+#tile-box {
+    background-color: pink;
+    width: 500px;
+    height: 500px;
+    margin: auto;
+    border: 10px solid black;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+h1 {
+    margin: 0px 0px 25px 0px;
+}
+
+.tile {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+}
+
+.tile:hover {
+    width: 40px;
+    height: 40px;
+    border: 5px solid white;
+}

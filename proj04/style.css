@@ -1,0 +1,38 @@
+body {
+    background-color: lightgray;
+}
+
+#main-body {
+    background-color: rgb(248, 205, 181);
+    width: 600px;
+    border-radius: 25px;
+    text-align: center;
+    margin: auto;
+    padding: 15px 25px 25px 25px;
+}
+
+#cell-body {
+    display: flex;
+    flex-direction: column;
+    flex-basis: auto;
+}
+
+.row {
+    display: grid;
+    grid-auto-flow: column;
+    place-items: center;
+}
+
+.cell {
+    width: 25px;
+    height: 25px;
+    margin: 1px;
+    color: red;
+}
+
+.rule {
+    display: grid;
+    grid-auto-flow: column;
+    grid-row: 2;
+    grid-column: 3;
+}
