@@ -5,6 +5,7 @@ const SVG_HEIGHT = 400;
 const SVG_ELEM = document.querySelector("#convex-hull-box");
 
 const convexHullViewer = new ConvexHullViewer(SVG_ELEM, new PointSet());
+const convexHull = new ConvexHull(convexHullViewer.ps, convexHullViewer);
 
 SVG_ELEM.addEventListener("click", convexHullViewer.addPoint);
 
@@ -365,6 +366,22 @@ function ConvexHullViewer(svg, ps) {
   // };
 
   // TODO: Create a polygon using the convex hull points once it's finished
+  this.drawHull = function (hullPs) {
+    console.log("hull points", hullPs);
+    const polygon = document.createElementNS(SVG_NS, "polygon");
+    let points = "";
+    for (let i = 0; i < hullPs.size(); i++) {
+      console.log("hull point", hullPs.points[i]);
+      currP = hullPs.points[i];
+      x = currP.x;
+      y = currP.y;
+
+      points += x + "," + y + " ";
+    }
+
+    polygon.setAttributeNS(null, "points", points);
+    this.edgeGroup.appendChild(polygon);
+  };
 }
 
 /*
@@ -376,7 +393,10 @@ function ConvexHull(ps, viewer) {
 
   // start a visualization of the Graham scan algorithm performed on ps
   this.start = function () {
-    // COMPLETE THIS METHOD
+    console.log("start");
+    console.log("convex hull", this.getConvexHull());
+
+    this.viewer.drawHull(this.getConvexHull());
   };
 
   // perform a single step of the Graham scan algorithm performed on ps
@@ -391,101 +411,109 @@ function ConvexHull(ps, viewer) {
     //
   };
 
-    // Return a new PointSet consisting of the points along the convex
-    // hull of ps. This method should **not** perform any
-    // visualization. It should **only** return the convex hull of ps
-    // represented as a (new) PointSet. Specifically, the elements in
-    // the returned PointSet should be the vertices of the convex hull
-    // in clockwise order, starting from the left-most point, breaking
-    // ties by minimum y-value.
-    this.getConvexHull = function () {
+  // Return a new PointSet consisting of the points along the convex
+  // hull of ps. This method should **not** perform any
+  // visualization. It should **only** return the convex hull of ps
+  // represented as a (new) PointSet. Specifically, the elements in
+  // the returned PointSet should be the vertices of the convex hull
+  // in clockwise order, starting from the left-most point, breaking
+  // ties by minimum y-value.
+  this.getConvexHull = function () {
+    // set = new PointSet();
+    // set.addNewPoint(12, 7);
+    // set.addNewPoint(8, 8);
+    // set.addNewPoint(17, 16);
+    // set.addNewPoint(13, 14);
+    // set.addNewPoint(17, 13);
+    // set.addNewPoint(15, 11);
+    // set.addNewPoint(6, 13);
+    // set.addNewPoint(19, 5);
+    // set.addNewPoint(9, 17);
+    // set.addNewPoint(18, 9);
+    // set.addNewPoint(6, 2);
+    // set.addNewPoint(16, 6);
+    // set.addNewPoint(5, 7);
+    // set.addNewPoint(13, 3);
+    // set.addNewPoint(9, 4);
+    // set.addNewPoint(10, 11);
+    // set.addNewPoint(21, 12);
 
-        // set = new PointSet();
-        // set.addNewPoint(12, 7);
-        // set.addNewPoint(8, 8);
-        // set.addNewPoint(17, 16);
-        // set.addNewPoint(13, 14);
-        // set.addNewPoint(17, 13);
-        // set.addNewPoint(15, 11);
-        // set.addNewPoint(6, 13);
-        // set.addNewPoint(19, 5);
-        // set.addNewPoint(9, 17);
-        // set.addNewPoint(18, 9);
-        // set.addNewPoint(6, 2);
-        // set.addNewPoint(16, 6);
-        // set.addNewPoint(5, 7);
-        // set.addNewPoint(13, 3);
-        // set.addNewPoint(9, 4);
-        // set.addNewPoint(10, 11);
-        // set.addNewPoint(21, 12);
+    set = this.ps;
 
-        set = this.ps;
-        
-        if (set.points.length == 1) {
-            return set;
-        }
-        
-        set.sort();
-        
-        // Current stack that is being filled w/ Convex Hull points
-        curr = new PointSet();
-        curr.addPoint(set.points[0]);
-        curr.addPoint(set.points[1]);
-        
-        for (let i = 2; i < set.points.length; i++) {
-            point = set.points[i];
-        
-            if (curr.points.length == 1) {
-                curr.addPoint(point);
-            }
-            else {
-                while (curr.points.length > 1 && isRight(curr.points[curr.points.length-1], curr.points[curr.points.length-2], point)) {
-                    curr.points.pop();
-                }
-                curr.addPoint(point);
-            }
-        }
-        
-        set.reverse();
-        
-        currBack = new PointSet();
-        currBack.addPoint(set.points[0]);
-        currBack.addPoint(set.points[1]);
-        
-        for (let i = 2; i < set.points.length; i++) {
-            point = set.points[i];
-        
-            if (currBack.points.length == 1) {
-                currBack.addPoint(point);
-            }
-            else {
-                while (currBack.points.length > 1 && isRight(currBack.points[currBack.points.length-1], currBack.points[currBack.points.length-2], point)) {
-                    currBack.points.pop();
-                }
-                currBack.addPoint(point);
-            }
-        }
-        
-        
-        for (let i = 1; i < currBack.points.length; i++) {
-            curr.points.push(currBack.points[i]);
-        }
-        
-        // console.log("Test:" + curr.toString());
-        return curr;
-        
-	
+    if (set.points.length == 1) {
+      return set;
     }
+
+    set.sort();
+
+    // Current stack that is being filled w/ Convex Hull points
+    curr = new PointSet();
+    curr.addPoint(set.points[0]);
+    curr.addPoint(set.points[1]);
+
+    for (let i = 2; i < set.points.length; i++) {
+      point = set.points[i];
+
+      if (curr.points.length == 1) {
+        curr.addPoint(point);
+      } else {
+        while (
+          curr.points.length > 1 &&
+          isRight(
+            curr.points[curr.points.length - 1],
+            curr.points[curr.points.length - 2],
+            point
+          )
+        ) {
+          curr.points.pop();
+        }
+        curr.addPoint(point);
+      }
+    }
+
+    set.reverse();
+
+    currBack = new PointSet();
+    currBack.addPoint(set.points[0]);
+    currBack.addPoint(set.points[1]);
+
+    for (let i = 2; i < set.points.length; i++) {
+      point = set.points[i];
+
+      if (currBack.points.length == 1) {
+        currBack.addPoint(point);
+      } else {
+        while (
+          currBack.points.length > 1 &&
+          isRight(
+            currBack.points[currBack.points.length - 1],
+            currBack.points[currBack.points.length - 2],
+            point
+          )
+        ) {
+          currBack.points.pop();
+        }
+        currBack.addPoint(point);
+      }
+    }
+
+    for (let i = 1; i < currBack.points.length; i++) {
+      curr.points.push(currBack.points[i]);
+    }
+
+    // console.log("Test:" + curr.toString());
+    return curr;
+  };
 }
 
 // Uses cross multiplication to determine if third point is to the right
 function isRight(a, b, c) {
-    return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) <= 0;
+  return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) <= 0;
 }
 
 try {
-exports.PointSet = PointSet;
-exports.ConvexHull = ConvexHull;
+  exports.PointSet = PointSet;
+  exports.ConvexHull = ConvexHull;
 } catch (e) {
-console.log("not running in Node");
+  console.log("not running in Node");
 }

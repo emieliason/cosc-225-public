@@ -28,3 +28,7 @@ circle  {
     fill: gray;
     stroke: rgb(92, 92, 92);
 }
+
+polygon {
+    fill:rgb(243, 196, 185);
+}
