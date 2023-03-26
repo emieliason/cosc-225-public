@@ -122,19 +122,23 @@ function PointSet() {
 function ConvexHullViewer(svg, ps) {
   this.svg = svg; // a svg object where the visualization is drawn
   this.ps = ps; // a point set of the points to be visualized
-  this.pointElements = [];
-  this.edgeElements = [];
-  this.highlighted = [];
-  this.edges = [];
-  this.muted = [];
+  this.edges = []; // edges, stored in format (p1, p2)
+
+  this.pointElements = []; // svg elements for points (circles)
+  this.edgeElements = []; // svg elements for edges (lines)
+
+  this.highlighted = []; // ids of highlighted points
+  this.muted = []; // ids of muted points
 
   // this.activeEdge;
 
   // this.svg.addEventListener("click", this.addPoint);
 
+  // svg group for edges, underneath
   this.edgeGroup = document.createElementNS(SVG_NS, "g");
   this.svg.appendChild(this.edgeGroup);
 
+  // svg group for points, in foreground
   this.pointGroup = document.createElementNS(SVG_NS, "g");
   this.svg.appendChild(this.pointGroup);
 
@@ -191,6 +195,7 @@ function ConvexHullViewer(svg, ps) {
   //   this.edges.splice(index, 1);
   // };
 
+  // What happens when a point is clicked
   this.clickPoint = function (pId) {
     // Retrieve the svg element associated with the id
     elem = this.pointElements[pId];
@@ -205,6 +210,7 @@ function ConvexHullViewer(svg, ps) {
     }
   };
 
+  // Mute point
   this.mute = function (pId) {
     // Add to muted list
     this.muted.push(pId);
@@ -214,16 +220,13 @@ function ConvexHullViewer(svg, ps) {
 
     // Add mute class to the element
     point.classList.add("mute");
-
-    console.log("muted", this.muted);
   };
 
+  // Unmute point
   this.unmute = function (pId) {
-    console.log("made it");
     // Retrieve the svg element associated with the id
     point = this.pointElements[pId];
     index = this.muted.indexOf(pId);
-    console.log("unhighlight point", index);
 
     // Remove from highlighted list
     this.muted.splice(index, 1);
