@@ -1,1 +1,18 @@
 /* Add Your Styles Here! */
+
+body {
+    background-color: rgb(212, 243, 185);
+}
+
+#convex-hull-box  {
+    background-color: white;
+}
+
+circle  {
+    fill: red;
+    r: 10px;
+}
+
+.highlight  {
+   fill: yellow;
+}
