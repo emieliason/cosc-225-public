@@ -16,8 +16,11 @@
       <p>Click a point to highlight it.</p>
       <svg id="convex-hull-box" xmlns="http://www.w3.org/2000/svg" width="600" height="400" fill="white">
       </svg>
-
-      <button onclick="convexHull.start()">Start Graham's Scan</button>
+      <div id="buttons">
+      <button onclick="convexHull.start()">Find Graham's Scan</button>
+      <button onclick="convexHull.step()">Step Graham's Scan</button>
+      <button onclick="convexHull.animate()">Animate Graham's Scan</button>
+    </div>
     </div>
   </body>
 </html>
