@@ -1,1 +1,30 @@
 /* Add Your Styles Here! */
+
+body {
+    background-color: rgb(212, 243, 185);
+}
+
+#convex-hull-box  {
+    background-color: white;
+}
+
+circle  {
+    fill: rgb(214, 214, 214);
+    stroke: black;
+   stroke-width: 3px;
+    r: 10px;
+}
+
+.highlight  {
+   stroke: rgb(218, 190, 7);
+}
+
+.edge  {
+    stroke: black;
+    stroke-width: 3px;
+}
+
+.mute {
+    fill: gray;
+    stroke: rgb(92, 92, 92);
+}
