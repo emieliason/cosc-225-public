@@ -149,7 +149,92 @@ function ConvexHull (ps, viewer) {
     // ties by minimum y-value.
     this.getConvexHull = function () {
 
-	// COMPLETE THIS METHOD
+        // set = new PointSet();
+        // set.addNewPoint(12, 7);
+        // set.addNewPoint(8, 8);
+        // set.addNewPoint(17, 16);
+        // set.addNewPoint(13, 14);
+        // set.addNewPoint(17, 13);
+        // set.addNewPoint(15, 11);
+        // set.addNewPoint(6, 13);
+        // set.addNewPoint(19, 5);
+        // set.addNewPoint(9, 17);
+        // set.addNewPoint(18, 9);
+        // set.addNewPoint(6, 2);
+        // set.addNewPoint(16, 6);
+        // set.addNewPoint(5, 7);
+        // set.addNewPoint(13, 3);
+        // set.addNewPoint(9, 4);
+        // set.addNewPoint(10, 11);
+        // set.addNewPoint(21, 12);
+
+        set = this.ps;
+        
+        if (set.points.length == 1) {
+            return set;
+        }
+        
+        set.sort();
+        
+        // Current stack that is being filled w/ Convex Hull points
+        curr = new PointSet();
+        curr.addPoint(set.points[0]);
+        curr.addPoint(set.points[1]);
+        
+        for (let i = 2; i < set.points.length; i++) {
+            point = set.points[i];
+        
+            if (curr.points.length == 1) {
+                curr.addPoint(point);
+            }
+            else {
+                while (curr.points.length > 1 && isRight(curr.points[curr.points.length-1], curr.points[curr.points.length-2], point)) {
+                    curr.points.pop();
+                }
+                curr.addPoint(point);
+            }
+        }
+        
+        set.reverse();
+        
+        currBack = new PointSet();
+        currBack.addPoint(set.points[0]);
+        currBack.addPoint(set.points[1]);
+        
+        for (let i = 2; i < set.points.length; i++) {
+            point = set.points[i];
+        
+            if (currBack.points.length == 1) {
+                currBack.addPoint(point);
+            }
+            else {
+                while (currBack.points.length > 1 && isRight(currBack.points[currBack.points.length-1], currBack.points[currBack.points.length-2], point)) {
+                    currBack.points.pop();
+                }
+                currBack.addPoint(point);
+            }
+        }
+        
+        
+        for (let i = 1; i < currBack.points.length; i++) {
+            curr.points.push(currBack.points[i]);
+        }
+        
+        // console.log("Test:" + curr.toString());
+        return curr;
+        
 	
     }
+}
+
+// Uses cross multiplication to determine if third point is to the right
+function isRight(a, b, c) {
+    return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) <= 0;
+}
+
+try {
+exports.PointSet = PointSet;
+exports.ConvexHull = ConvexHull;
+} catch (e) {
+console.log("not running in Node");
 }
