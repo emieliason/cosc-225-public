@@ -409,6 +409,76 @@ function ConvexHull(ps, viewer) {
     // mute popped element
     // create new edge with new top of stack
     //
+
+    set = this.ps;
+
+    if (set.points.length == 1) {
+      return set;
+    }
+
+    set.sort();
+
+    // Current stack that is being filled w/ Convex Hull points
+    curr = new PointSet();
+    curr.addPoint(set.points[0]);
+    this.viewer.clickPoint(set.points[0].id);
+    curr.addPoint(set.points[1]);
+    this.viewer.clickPoint(set.points[1].id);
+
+    for (let i = 2; i < set.points.length; i++) {
+      point = set.points[i];
+
+      if (curr.points.length == 1) {
+        curr.addPoint(point);
+      } else {
+        while (
+          curr.points.length > 1 &&
+          isRight(
+            curr.points[curr.points.length - 1],
+            curr.points[curr.points.length - 2],
+            point
+          )
+        ) {
+          curr.points.pop();
+        }
+        curr.addPoint(point);
+      }
+    }
+
+    set.reverse();
+
+    currBack = new PointSet();
+    currBack.addPoint(set.points[0]);
+    currBack.addPoint(set.points[1]);
+
+    for (let i = 2; i < set.points.length; i++) {
+      point = set.points[i];
+
+      if (currBack.points.length == 1) {
+        currBack.addPoint(point);
+      } else {
+        while (
+          currBack.points.length > 1 &&
+          isRight(
+            currBack.points[currBack.points.length - 1],
+            currBack.points[currBack.points.length - 2],
+            point
+          )
+        ) {
+          currBack.points.pop();
+        }
+        currBack.addPoint(point);
+      }
+    }
+
+    for (let i = 1; i < currBack.points.length; i++) {
+      curr.points.push(currBack.points[i]);
+    }
+
+    // console.log("Test:" + curr.toString());
+    return curr;
+  };
+
   };
 
   // Return a new PointSet consisting of the points along the convex
@@ -504,7 +574,6 @@ function ConvexHull(ps, viewer) {
     // console.log("Test:" + curr.toString());
     return curr;
   };
-}
 
 // Uses cross multiplication to determine if third point is to the right
 function isRight(a, b, c) {
