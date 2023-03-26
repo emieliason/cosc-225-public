@@ -275,6 +275,7 @@ function ConvexHullViewer(svg, ps) {
 
   // Add edge
   this.addEdge = function (pId1, pId2) {
+    console.log("adding edge between ", pId1, " and ", pId2);
     // Retrieve the svg elements associated with the ids
     point1 = this.pointElements[pId1];
     point2 = this.pointElements[pId2];
@@ -309,6 +310,7 @@ function ConvexHullViewer(svg, ps) {
 
   // Remove an edge
   this.removeEdge = function (pId1, pId2) {
+    console.log("removing edge between ", pId1, " and ", pId2);
     edge = this.edgeElements[pId1 + "-" + pId2];
     index = this.edges.indexOf(pId1 + ", " + pId2);
 
@@ -435,8 +437,8 @@ function ConvexHull(ps, viewer) {
 
       // if there is only one point in the stack, then add the next point
       if (curr.points.length == 1) {
-
-        this.viewer.addEdge(curr.points[curr.points.length-1].id, point.id);
+        this.viewer.clickPoint(curr.points[curr.points.length - 1].id);
+        this.viewer.clickPoint(point.id);
         curr.addPoint(point);
 
       } else {
@@ -455,6 +457,9 @@ function ConvexHull(ps, viewer) {
         
         this.viewer.addEdge(curr.points[curr.points.length-1].id, point.id);
         curr.addPoint(point);
+
+        // this.viewer.addEdge(curr.points[curr.points.length - 1].id, point.id);
+        console.log("adding point", point);
       }
     }
 
@@ -475,6 +480,7 @@ function ConvexHull(ps, viewer) {
 
       if (currBack.points.length == 1) {
         currBack.addPoint(point);
+        console.log("length is 1, adding point", point);
       } else {
         while (
           currBack.points.length > 1 &&
@@ -493,18 +499,19 @@ function ConvexHull(ps, viewer) {
             this.viewer.removeEdge(currBack.points[currBack.points.length - 2].id, currBack.points[currBack.points.length - 1].id);
           } 
           currBack.points.pop();
+          console.log("popping point", popped);
         }
 
         console.log("Adding Edges!! Points: " + currBack.points[currBack.points.length-1].id + "and" + point.id);
         this.viewer.addEdge(currBack.points[currBack.points.length-1].id, point.id);
         currBack.addPoint(point);
+        console.log("adding point", point);
       }
     }
 
     for (let i = 1; i < currBack.points.length; i++) {
       curr.points.push(currBack.points[i]);
     }
-    console.log("Test:" + curr.toString());
 
     return curr;
   };
