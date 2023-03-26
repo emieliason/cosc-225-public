@@ -128,6 +128,8 @@ function ConvexHullViewer(svg, ps) {
   this.edges = [];
   this.muted = [];
 
+  // this.activeEdge;
+
   // this.svg.addEventListener("click", this.addPoint);
 
   this.edgeGroup = document.createElementNS(SVG_NS, "g");
@@ -147,6 +149,7 @@ function ConvexHullViewer(svg, ps) {
     convexHullViewer.draw();
   };
 
+  // TODO: merge with addpoint function
   // Draws a point.
   this.draw = function () {
     // The current point to draw is the one that was just added (one before the current id)
@@ -165,7 +168,7 @@ function ConvexHullViewer(svg, ps) {
     // Add event listener for highlighting
     dot.addEventListener("click", (e) => {
       e.stopPropagation();
-      this.clickVertex(dot.id);
+      this.clickPoint(dot.id);
     });
 
     // Append to elements list and svg
@@ -176,17 +179,29 @@ function ConvexHullViewer(svg, ps) {
     console.log(this.ps);
   };
 
-  this.clickVertex = function (pId) {
+  // TODO: removePoint
+  // this.removePoint = function (pId) {
+  //   point = this.pointElements[pId];
+  //   // index = this.ps
+
+  //   // Remove element from group
+  //   this.pointGroup.removeChild(point);
+
+  //   // Remove element from list
+  //   this.edges.splice(index, 1);
+  // };
+
+  this.clickPoint = function (pId) {
     // Retrieve the svg element associated with the id
     elem = this.pointElements[pId];
     index = this.highlighted.indexOf(pId);
 
     if (index == -1) {
       // Add to highlighted list and class
-      this.highlight(pId);
+      this.highlightPoint(pId);
     } else {
       // Remove from highlighted list and class
-      this.unhighlight(pId);
+      this.unhighlightPoint(pId);
     }
   };
 
@@ -217,7 +232,7 @@ function ConvexHullViewer(svg, ps) {
     point.classList.remove("mute");
   };
 
-  this.highlight = function (pId) {
+  this.highlightPoint = function (pId) {
     // Add to highlighted list
     this.highlighted.push(pId);
 
@@ -233,14 +248,14 @@ function ConvexHullViewer(svg, ps) {
       this.addEdge(this.highlighted[0], this.highlighted[1]);
 
       // Unhighlight both elements
-      this.unhighlight(this.highlighted[0]);
-      this.unhighlight(this.highlighted[0]);
+      this.unhighlightPoint(this.highlighted[0]);
+      this.unhighlightPoint(this.highlighted[0]);
       this.highlighted = [];
     }
   };
 
   // Unhighlight point associated with pId
-  this.unhighlight = function (pId) {
+  this.unhighlightPoint = function (pId) {
     console.log("id", pId);
     // Retrieve the svg element associated with the id
     point = this.pointElements[pId];
@@ -288,20 +303,65 @@ function ConvexHullViewer(svg, ps) {
     }
   };
 
+  // Remove an edge
   this.removeEdge = function (pId1, pId2) {
     edge = this.edgeElements[pId1 + "-" + pId2];
     index = this.edges.indexOf(pId1 + ", " + pId2);
 
+    // If it's in the wrong order, swap it
     if (edge == undefined) {
       edge = this.edgeElements[pId2 + "-" + pId1];
       index = this.edges.indexOf(pId2 + ", " + pId1);
     }
 
-    console.log("edge", edge);
-
+    // Remove element from group
     this.edgeGroup.removeChild(edge);
+
+    // Remove element from list
     this.edges.splice(index, 1);
   };
+
+  // TODO: Highlight edge  (should only need one)
+  // TODO: Unhighlight edge
+
+  // this.highlightEdge = function (pId) {
+  //   // Add to highlighted list
+  //   this.highlighted.push(pId);
+
+  //   // Retrieve the svg element associated with the id
+  //   point = this.pointElements[pId];
+
+  //   // Add highlighted class to the element
+  //   point.classList.add("highlight");
+
+  //   // If two elements have been highlighted
+  //   if (this.highlighted.length == 2) {
+  //     // Add an edge between them
+  //     this.addEdge(this.highlighted[0], this.highlighted[1]);
+
+  //     // Unhighlight both elements
+  //     this.unhighlightPoint(this.highlighted[0]);
+  //     this.unhighlightPoint(this.highlighted[0]);
+  //     this.highlighted = [];
+  //   }
+  // };
+
+  // // Unhighlight point associated with pId
+  // this.unhighlightEdge = function (pId) {
+  //   console.log("id", pId);
+  //   // Retrieve the svg element associated with the id
+  //   point = this.pointElements[pId];
+  //   index = this.highlighted.indexOf(pId);
+  //   console.log("unhighlight point", index);
+
+  //   // Remove from highlighted list
+  //   this.highlighted.splice(index, 1);
+
+  //   // Remove highlighted class from element
+  //   point.classList.remove("highlight");
+  // };
+
+  // TODO: Create a polygon using the convex hull points once it's finished
 }
 
 /*
