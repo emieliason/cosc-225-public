@@ -285,7 +285,7 @@ function ConvexHullViewer(svg, ps) {
       this.edges.indexOf(pId1 + ", " + pId2) != -1 ||
       this.edges.indexOf(pId2 + ", " + pId1) != -1
     ) {
-    //   this.removeEdge(pId1, pId2); AHAHAHAHAHH I FOUND IT
+      //   this.removeEdge(pId1, pId2); AHAHAHAHAHH I FOUND IT
     } else {
       // Create element using cx and cy coordinates from svg elements
       const edgeElt = document.createElementNS(SVG_NS, "line");
@@ -428,17 +428,13 @@ function ConvexHull(ps, viewer) {
     this.viewer.addEdge(set.points[0].id, set.points[1].id);
 
     for (let i = 2; i < set.points.length; i++) {
-    
       // grabbing point c
       point = set.points[i];
 
-
       // if there is only one point in the stack, then add the next point
       if (curr.points.length == 1) {
-
-        this.viewer.addEdge(curr.points[curr.points.length-1].id, point.id);
+        this.viewer.addEdge(curr.points[curr.points.length - 1].id, point.id);
         curr.addPoint(point);
-
       } else {
         while (
           // if the point is to the left, then remove prev edge + create new edge
@@ -449,11 +445,14 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-          this.viewer.removeEdge(curr.points[curr.points.length - 1].id, curr.points[curr.points.length - 2].id)
+          this.viewer.removeEdge(
+            curr.points[curr.points.length - 1].id,
+            curr.points[curr.points.length - 2].id
+          );
           curr.points.pop();
         }
-        
-        this.viewer.addEdge(curr.points[curr.points.length-1].id, point.id);
+
+        this.viewer.addEdge(curr.points[curr.points.length - 1].id, point.id);
         curr.addPoint(point);
       }
     }
@@ -465,9 +464,11 @@ function ConvexHull(ps, viewer) {
     currBack.addPoint(set.points[0]);
     currBack.addPoint(set.points[1]);
     console.log("currBack set ONE: " + currBack.toString());
-    
-    console.log("Beginning of middle: " + set.points[0].id + "," + set.points[1].id);
-     // adding first two edges
+
+    console.log(
+      "Beginning of middle: " + set.points[0].id + "," + set.points[1].id
+    );
+    // adding first two edges
     this.viewer.addEdge(set.points[0].id, set.points[1].id);
 
     for (let i = 2; i < set.points.length; i++) {
@@ -484,19 +485,40 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-            
           console.log("complete set: " + set.toString());
           console.log("currBack set: " + currBack.toString());
-          console.log("Removing Edges!! Points: " + currBack.points[currBack.points.length - 2].id + "and" + currBack.points[currBack.points.length - 1].id);
+          console.log(
+            "Removing Edges!! Points: " +
+              currBack.points[currBack.points.length - 2].id +
+              "and" +
+              currBack.points[currBack.points.length - 1].id
+          );
 
-          if (!((currBack.points[currBack.points.length - 2].id == set.points[0].id) && (currBack.points[currBack.points.length - 1].id == set.points[1].id))) {
-            this.viewer.removeEdge(currBack.points[currBack.points.length - 2].id, currBack.points[currBack.points.length - 1].id);
-          } 
+          if (
+            !(
+              currBack.points[currBack.points.length - 2].id ==
+                set.points[0].id &&
+              currBack.points[currBack.points.length - 1].id == set.points[1].id
+            )
+          ) {
+            this.viewer.removeEdge(
+              currBack.points[currBack.points.length - 2].id,
+              currBack.points[currBack.points.length - 1].id
+            );
+          }
           currBack.points.pop();
         }
 
-        console.log("Adding Edges!! Points: " + currBack.points[currBack.points.length-1].id + "and" + point.id);
-        this.viewer.addEdge(currBack.points[currBack.points.length-1].id, point.id);
+        console.log(
+          "Adding Edges!! Points: " +
+            currBack.points[currBack.points.length - 1].id +
+            "and" +
+            point.id
+        );
+        this.viewer.addEdge(
+          currBack.points[currBack.points.length - 1].id,
+          point.id
+        );
         currBack.addPoint(point);
       }
     }
@@ -544,11 +566,11 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-            console.log("1POP" + curr.points.pop().id);
+          console.log("1POP" + curr.points.pop().id);
         }
         console.log("1PUSH" + point.id);
         curr.addPoint(point);
-        console.log("pt 1 "+ curr.toString());
+        console.log("pt 1 " + curr.toString());
       }
     }
 
@@ -572,11 +594,11 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-            console.log("2POP" + currBack.points.pop().id);
+          console.log("2POP" + currBack.points.pop().id);
         }
         console.log("2PUSH" + point.id);
         currBack.addPoint(point);
-        console.log("pt 2 "+ currBack.toString());
+        console.log("pt 2 " + currBack.toString());
       }
     }
 
