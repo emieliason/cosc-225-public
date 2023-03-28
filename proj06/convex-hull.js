@@ -2,13 +2,19 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const SVG_WIDTH = 600;
 const SVG_HEIGHT = 400;
 
-// Put them all in a function, set SVG
-const SVG_ELEM = document.querySelector("#convex-hull-box");
+let SVG_ELEM;
+let convexHullViewer;
+let convexHull;
 
-const convexHullViewer = new ConvexHullViewer(SVG_ELEM, new PointSet());
-const convexHull = new ConvexHull(convexHullViewer.ps, convexHullViewer);
+// Set the main variables
+function setSVG() {
+  SVG_ELEM = document.querySelector("#convex-hull-box");
 
-SVG_ELEM.addEventListener("click", convexHullViewer.addPoint);
+  convexHullViewer = new ConvexHullViewer(SVG_ELEM, new PointSet());
+  convexHull = new ConvexHull(convexHullViewer.ps, convexHullViewer);
+
+  SVG_ELEM.addEventListener("click", convexHullViewer.addPoint);
+}
 
 // An object that represents a 2-d point, consisting of an
 // x-coordinate and a y-coordinate. The `compareTo` function
