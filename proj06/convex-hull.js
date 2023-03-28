@@ -2,6 +2,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const SVG_WIDTH = 600;
 const SVG_HEIGHT = 400;
 
+// Put them all in a function, set SVG
 const SVG_ELEM = document.querySelector("#convex-hull-box");
 
 const convexHullViewer = new ConvexHullViewer(SVG_ELEM, new PointSet());
@@ -399,6 +400,24 @@ function ConvexHull(ps, viewer) {
     this.viewer.drawHull(this.getConvexHull());
   };
 
+  // Idea for animation
+  // set = ps.sort();
+  // make a new point set to hold the convex hull points curr, and currback, initially holding the first two points
+  // "proposed" edge
+
+  // current node as the highlighter one
+  // keep state of the execution
+
+  // one step: if set still has points in it
+  // pop one off, and just consider that one
+  // if it's the last one, do the connection
+  // if it's not, do a while loop that checks whether it's to the right or not
+  // add edge once you're done
+  // animate:
+  // repeat "step" until set doesn't have points in it
+  // set set to = ps.reverse();
+  // repeat "step" until set doesn't have points in it
+
   // perform a single step of the Graham scan algorithm performed on ps
   this.step = function () {
     // COMPLETE THIS METHOD
@@ -566,11 +585,12 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-          console.log("1POP" + curr.points.pop().id);
+          // console.log("1POP" + curr.points.pop().id);
+          curr.points.pop();
         }
-        console.log("1PUSH" + point.id);
+        // console.log("1PUSH" + point.id);
         curr.addPoint(point);
-        console.log("pt 1 " + curr.toString());
+        // console.log("pt 1 " + curr.toString());
       }
     }
 
@@ -594,11 +614,12 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-          console.log("2POP" + currBack.points.pop().id);
+          // console.log("2POP" + currBack.points.pop().id);
+          currBack.points.pop();
         }
-        console.log("2PUSH" + point.id);
+        // console.log("2PUSH" + point.id);
         currBack.addPoint(point);
-        console.log("pt 2 " + currBack.toString());
+        // console.log("pt 2 " + currBack.toString());
       }
     }
 
@@ -606,14 +627,14 @@ function ConvexHull(ps, viewer) {
       curr.points.push(currBack.points[i]);
     }
 
-    // console.log("Test:" + curr.toString());
+    console.log("Test:" + curr.toString());
     return curr;
   };
 }
 
 // Uses cross multiplication to determine if third point is to the right
 function isRight(a, b, c) {
-  return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) >= 0;
+  return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) <= 0;
 }
 
 try {
