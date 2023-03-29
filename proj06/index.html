@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Graham's Scan Algorithm</title>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="convex-hull.js" defer></script>
     <!-- uncomment this line to test your program: -->
 
-    <script defer>
+    <script>
       window.onload = () => {
         setSVG();
         console.log("loaded svg");
@@ -18,9 +18,16 @@
   <body>
     <div id="root">
       <h1>Convex Hulls!</h1>
-      <h2>By Emi Eliason and Sarah Wu</h2>
-      <p>Click on the SVG box to add new points!</p>
-      <p>Click a point to highlight it.</p>
+      <p>By Emi Eliason and Sarah Wu<p>
+      <p>This website visualizes the convex hull algorithm. Three different functions are provided for this exploration: <p>
+
+      <ol>
+        <li><b>Find: </b>Automatically finding the convex hull</li> 
+        <li><b>Step: </b>Going through the algorithm step by step</li>
+        <li><b>Animate: </b>Animating the entire process.</li>
+      </ol>
+
+      <p>Click on the SVG box to add new points! To reset the canvas, you must refresh the page.</p>
       <svg id="convex-hull-box" xmlns="http://www.w3.org/2000/svg" width="600" height="400" fill="white">
       </svg>
       <div id="buttons">
