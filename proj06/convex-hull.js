@@ -6,6 +6,8 @@ let SVG_ELEM;
 let convexHullViewer;
 let convexHull;
 
+let clickAmount = 0;
+
 // Set the main variables
 function setSVG() {
   SVG_ELEM = document.querySelector("#convex-hull-box");
@@ -391,6 +393,13 @@ function ConvexHullViewer(svg, ps) {
   };
 }
 
+//used to keep track of order for step function
+function StepStack(point1, point2, step) {
+  this.pt1 = point1;
+  this.pt2 = point2;
+  this.step = step; //boolean, true = add, false = remove
+}
+
 /*
  * An object representing an instance of the convex hull problem. A ConvexHull stores a PointSet ps that stores the input points, and a ConvexHullViewer viewer that displays interactions between the ConvexHull computation and the
  */
@@ -406,35 +415,32 @@ function ConvexHull(ps, viewer) {
     this.viewer.drawHull(this.getConvexHull());
   };
 
-  // Idea for animation
-  // set = ps.sort();
-  // make a new point set to hold the convex hull points curr, and currback, initially holding the first two points
-  // "proposed" edge
-
-  // current node as the highlighter one
-  // keep state of the execution
-
-  // one step: if set still has points in it
-  // pop one off, and just consider that one
-  // if it's the last one, do the connection
-  // if it's not, do a while loop that checks whether it's to the right or not
-  // add edge once you're done
-  // animate:
-  // repeat "step" until set doesn't have points in it
-  // set set to = ps.reverse();
-  // repeat "step" until set doesn't have points in it
 
   // perform a single step of the Graham scan algorithm performed on ps
   this.step = function () {
-    // COMPLETE THIS METHOD
-    //  highlight first element
-    // highlight 2nd element in stack, creating edge
-    // while element is not in hull
-    // remove edge with last element
-    // mute popped element
-    // create new edge with new top of stack
-    //
+    clickAmount++;
+    array = this.fullstep();
 
+    if (clickAmount <= array.length) {
+      currStep = array[clickAmount-1];
+
+      // if adding a line
+      if (currStep.step == true) {
+        this.viewer.addEdge(currStep.pt1, currStep.pt2);
+      } 
+      
+      // if removing a line 
+      else {
+        this.viewer.removeEdge(currStep.pt1, currStep.pt2);
+      }
+    };
+
+  }
+
+
+
+  //THIS IS THE STEP FUNCTION BUT TAKEN OUT!!
+  this.fullstep = function() {
     set = this.ps;
 
     if (set.points.length == 1) {
@@ -442,15 +448,17 @@ function ConvexHull(ps, viewer) {
     }
 
     set.sort();
-    console.log("THIS IS THE SET: " + set);
 
-    // // Current stack that is being filled w/ Convex Hull points
+    // Recording current step functions
+    let stepArray = [];
+
+    // Current stack that is being filled w/ Convex Hull points
     curr = new PointSet();
     curr.addPoint(set.points[0]);
     curr.addPoint(set.points[1]);
 
     // adding first two edges
-    this.viewer.addEdge(set.points[0].id, set.points[1].id);
+    stepArray.push(new StepStack(set.points[0].id, set.points[1].id, true));
 
     for (let i = 2; i < set.points.length; i++) {
       // grabbing point c
@@ -458,9 +466,10 @@ function ConvexHull(ps, viewer) {
 
       // if there is only one point in the stack, then add the next point
       if (curr.points.length == 1) {
-        this.viewer.addEdge(curr.points[curr.points.length - 1].id, point.id);
+        stepArray.push(curr.points[curr.points.length - 1].id, point.id, true);
         curr.addPoint(point);
       } else {
+
         while (
           // if the point is to the left, then remove prev edge + create new edge
           curr.points.length > 1 &&
@@ -470,14 +479,13 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-          this.viewer.removeEdge(
-            curr.points[curr.points.length - 1].id,
-            curr.points[curr.points.length - 2].id
-          );
+
+          //remove from set stack
+          stepArray.push(new StepStack(curr.points[curr.points.length - 2].id, curr.points[curr.points.length - 1].id, false));
           curr.points.pop();
         }
 
-        this.viewer.addEdge(curr.points[curr.points.length - 1].id, point.id);
+        stepArray.push(new StepStack(curr.points[curr.points.length - 1].id, point.id, true));
         curr.addPoint(point);
       }
     }
@@ -488,13 +496,9 @@ function ConvexHull(ps, viewer) {
     currBack = new PointSet();
     currBack.addPoint(set.points[0]);
     currBack.addPoint(set.points[1]);
-    console.log("currBack set ONE: " + currBack.toString());
 
-    console.log(
-      "Beginning of middle: " + set.points[0].id + "," + set.points[1].id
-    );
     // adding first two edges
-    this.viewer.addEdge(set.points[0].id, set.points[1].id);
+    stepArray.push(new StepStack(set.points[0].id, set.points[1].id, true));
 
     for (let i = 2; i < set.points.length; i++) {
       point = set.points[i];
@@ -510,15 +514,7 @@ function ConvexHull(ps, viewer) {
             point
           )
         ) {
-          console.log("complete set: " + set.toString());
-          console.log("currBack set: " + currBack.toString());
-          console.log(
-            "Removing Edges!! Points: " +
-              currBack.points[currBack.points.length - 2].id +
-              "and" +
-              currBack.points[currBack.points.length - 1].id
-          );
-
+          
           if (
             !(
               currBack.points[currBack.points.length - 2].id ==
@@ -526,24 +522,14 @@ function ConvexHull(ps, viewer) {
               currBack.points[currBack.points.length - 1].id == set.points[1].id
             )
           ) {
-            this.viewer.removeEdge(
-              currBack.points[currBack.points.length - 2].id,
-              currBack.points[currBack.points.length - 1].id
-            );
+            //remove from set stack
+            stepArray.push(new StepStack(currBack.points[currBack.points.length - 2].id, currBack.points[currBack.points.length - 1].id, false));
           }
           currBack.points.pop();
         }
 
-        console.log(
-          "Adding Edges!! Points: " +
-            currBack.points[currBack.points.length - 1].id +
-            "and" +
-            point.id
-        );
-        this.viewer.addEdge(
-          currBack.points[currBack.points.length - 1].id,
-          point.id
-        );
+        //add to set stack
+        stepArray.push(new StepStack(currBack.points[currBack.points.length - 1].id, point.id, true));
         currBack.addPoint(point);
       }
     }
@@ -551,10 +537,23 @@ function ConvexHull(ps, viewer) {
     for (let i = 1; i < currBack.points.length; i++) {
       curr.points.push(currBack.points[i]);
     }
-    console.log("Test:" + curr.toString());
+    
+    return stepArray;
+  }
 
-    return curr;
-  };
+  this.animate = function() {
+    let array = this.fullstep();
+    let time = setInterval(frame, 500);
+
+    function frame() {
+      if (clickAmount > array.length) {
+        clearInterval(time);
+      } else {
+          convexHull.step();
+        };
+      }
+    }
+
 
   // Return a new PointSet consisting of the points along the convex
   // hull of ps. This method should **not** perform any
