@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Heighway Dragon</title>
+    <script src="heighway.js" defer></script>
+  </head>
+  <body>
+    <h1>The Heighway Dragon</h1>
+    <svg id="canvas" width="600" height="300" viewBox="0 0 600 300">
+      <defs id="heighway-defs">
+      </defs>
+      <rect width="600" height="300" stroke="black" stroke-width="5" fill="white"/>
+      <!-- the transformation of the #heighway-group element ensures that
+      positive y-coordinates are in the vertical direction -->
+      <g id="heighway-group" transform="matrix(1, 0, 0, -1, 0, 300)"></g>	     
+    </svg>
+  </body>
+</html>
