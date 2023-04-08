@@ -3,17 +3,46 @@
   <head>
     <meta charset="utf-8">
     <title>Heighway Dragon</title>
+    <link rel="stylesheet" href="style.css">
     <script src="heighway.js" defer></script>
   </head>
   <body>
+    <div id="main-body">
     <h1>The Heighway Dragon</h1>
-    <svg id="canvas" width="600" height="300" viewBox="0 0 600 300">
-      <defs id="heighway-defs">
-      </defs>
-      <rect width="600" height="300" stroke="black" stroke-width="5" fill="white"/>
-      <!-- the transformation of the #heighway-group element ensures that
-      positive y-coordinates are in the vertical direction -->
-      <g id="heighway-group" transform="matrix(1, 0, 0, -1, 0, 300)"></g>	     
-    </svg>
+    <h4>Self-Similarity Project by Emi Eliason '23</h4>
+
+    <p>
+      A <em>Heighway dragon</em> is a self-similar fractal first investigated by NASA physicists John Heighway, Bruce Banks, and William Harter.
+      It is also the curve that is generated when you continually fold a paper in half to the right, then unfold it completely.
+      There are many versions of this curve depending on the original shape and the angle at which new iterations turn.
+      For this demonstration, we will be using a regular line segment and a 90º angle.
+    </p>
+
+    <p>
+      The Heighway dragon starts with one line segment. For each new iteration, replace the line segment with two smaller line segments such that the original segment is the hypotenuse of an isoceles right triangle.
+      Alternate between turning "left" from the original segment and turning "right".
+    </p>
+
+    <p>
+      You can test different iterations of the Heighway dragon below:
+    </p>
+
+    <p>
+      <strong>Iteration Number:</strong>
+      <input type="number" id="iterations" min="1" max="20">
+      <button onclick="start()">Draw</button>
+    </p>
+
+    <div id="svg-div">
+    </div>
+
+    <p>
+      <strong>Inspiration:</strong>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=EdyociU35u8">Vi Hart's "Doodling in Math Class: DRAGONS"</a></li>
+        <li><a href="https://larryriddle.agnesscott.org/ifs/heighway/heighway.htm">Larry Riddle's "Heighway Dragon"</a></li>
+      </ul>
+    </p>
+  </div>
   </body>
 </html>
